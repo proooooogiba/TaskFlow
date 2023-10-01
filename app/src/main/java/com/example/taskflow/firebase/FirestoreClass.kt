@@ -1,9 +1,9 @@
 package com.example.taskflow.firebase
 
 import android.app.Activity
-import android.content.pm.SigningInfo
 import android.util.Log
 import com.example.taskflow.activities.MainActivity
+import com.example.taskflow.activities.MyProfileActivity
 import com.example.taskflow.activities.SignInActivity
 import com.example.taskflow.activities.SignUpActivity
 import com.example.taskflow.models.User
@@ -11,7 +11,6 @@ import com.example.taskflow.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.ktx.Firebase
 
 class FirestoreClass {
 
@@ -31,8 +30,7 @@ class FirestoreClass {
                 )
             }
     }
-
-    fun SignInUser(activity: Activity) {
+    fun loadUserData(activity: Activity) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
             .get()
@@ -47,6 +45,11 @@ class FirestoreClass {
                     is MainActivity -> {
                         if (loggedInUser != null) {
                             activity.updateNavigationUserDetails(loggedInUser)
+                        }
+                    }
+                    is MyProfileActivity -> {
+                        if (loggedInUser != null) {
+                            activity.setUserDataUnUI(loggedInUser)
                         }
                     }
                 }
