@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "636802461170",
+    "project_id": "taskflow-bffa5",
+    "storage_bucket": "taskflow-bffa5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636802461170:android:2d609ba74975b644b5cf6b",
+        "android_client_info": {
+          "package_name": "com.example.taskflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAyK7jBz_r72LCg3ES4oFZFg-p3dyhBiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
