@@ -2,6 +2,7 @@ package com.example.taskflow.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.example.taskflow.activities.MainActivity
 import com.example.taskflow.activities.MyProfileActivity
 import com.example.taskflow.activities.SignInActivity
@@ -30,6 +31,28 @@ class FirestoreClass {
                 )
             }
     }
+
+    fun updateUserProfileData(activity: MyProfileActivity,
+                              userHashMap: HashMap<String, Any>) {
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserId())
+            .update(userHashMap)
+            .addOnSuccessListener {
+                Log.i(activity.javaClass.simpleName, "Profile Data updated")
+                Toast.makeText(activity, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                activity.profileUpdateSuccess()
+            }.addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating a board.",
+                    e
+                )
+                Toast.makeText(activity, "Error when updating the profile!", Toast.LENGTH_SHORT).show()
+            }
+    }
+
     fun loadUserData(activity: Activity) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
