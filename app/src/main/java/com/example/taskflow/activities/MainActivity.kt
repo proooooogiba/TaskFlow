@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide
 import com.example.taskflow.R
 import com.example.taskflow.firebase.FirestoreClass
 import com.example.taskflow.models.User
+import com.example.taskflow.utils.Constants
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import de.hdodenhof.circleimageview.CircleImageView
@@ -22,6 +24,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
     }
+
+    private lateinit var mUserName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         FirestoreClass().loadUserData(this)
         this.onBackPressedDispatcher.addCallback(this, callback)
+
+        val fab_create_board = findViewById<FloatingActionButton>(R.id.fab_create_board)
+        fab_create_board.setOnClickListener {
+            val intent = Intent(this,
+                CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME, mUserName)
+            startActivity(intent)
+        }
     }
 
     private fun setUpActionBar() {
@@ -67,6 +79,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User) {
+        mUserName = user.name
+
         val nav_user_image = findViewById<CircleImageView>(R.id.nav_user_image)
         Glide
             .with(this)

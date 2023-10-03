@@ -3,10 +3,12 @@ package com.example.taskflow.firebase
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
+import com.example.taskflow.activities.CreateBoardActivity
 import com.example.taskflow.activities.MainActivity
 import com.example.taskflow.activities.MyProfileActivity
 import com.example.taskflow.activities.SignInActivity
 import com.example.taskflow.activities.SignUpActivity
+import com.example.taskflow.models.Board
 import com.example.taskflow.models.User
 import com.example.taskflow.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +30,26 @@ class FirestoreClass {
                     activity.javaClass.simpleName,
                     "Error writing document",
                     e
+                )
+            }
+    }
+
+    fun createBoard(activity: CreateBoardActivity, board: Board) {
+        mFireStore.collection(Constants.BOARDS)
+            .document()
+            .set(board, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName, "Board created successfully.")
+
+                Toast.makeText(activity, "Board created successfully.", Toast.LENGTH_SHORT).show()
+                activity.boardCreatedSuccessfully()
+            }.addOnFailureListener {
+                exception ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating a board.",
+                    exception
                 )
             }
     }
