@@ -32,4 +32,6 @@
     <string name="board_name">Board Name</string>
     <string name="create_a_board">create a board</string>
 
+    <string name="no_boards_are_available">No Boards are available!!!</string>
+
 </resources>
