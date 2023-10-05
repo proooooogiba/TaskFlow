@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.Toast
 import com.example.taskflow.R
 import com.example.taskflow.activities.BaseActivity
+import com.example.taskflow.databinding.ActivitySignInBinding
+import com.example.taskflow.databinding.ActivitySignUpBinding
 import com.example.taskflow.firebase.FirestoreClass
 import com.example.taskflow.models.User
 import com.google.android.gms.tasks.OnCompleteListener
@@ -14,15 +16,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class SignUpActivity : BaseActivity() {
+
+    private lateinit var binding: ActivitySignUpBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        //This call the parent constructor
         super.onCreate(savedInstanceState)
-        // This is used to align the xml view to this class
-        setContentView(R.layout.activity_sign_up)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupActionBar()
-        // Click event for sign-up button.
-        findViewById<Button>(R.id.btn_sign_up).setOnClickListener {
+
+        binding.btnSignUp.setOnClickListener {
             registerUser()
         }
     }
@@ -41,8 +45,7 @@ class SignUpActivity : BaseActivity() {
 
 
     private fun setupActionBar() {
-        val toolbar_sign_up_activity = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_sign_up_activity)
-        setSupportActionBar(toolbar_sign_up_activity)
+        setSupportActionBar(binding.toolbarSignUpActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -50,25 +53,19 @@ class SignUpActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
         }
 
-        toolbar_sign_up_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarSignUpActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun registerUser() {
-        // Here we get the text from editText and trim the space
-        val et_name = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_name)
-        val et_email = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_email)
-        val et_password = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_password)
-        val name: String = et_name.text.toString().trim { it <= ' ' }
-        val email: String = et_email.text.toString().trim { it <= ' ' }
-        val password: String = et_password.text.toString().trim { it <= ' ' }
+        val name: String = binding.etName.text.toString().trim { it <= ' ' }
+        val email: String = binding.etEmail.text.toString().trim { it <= ' ' }
+        val password: String = binding.etPassword.text.toString().trim { it <= ' ' }
 
         if (validateForm(name, email, password)) {
-            // Show the progress dialog.
             showProgressDialog(resources.getString(R.string.please_wait))
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                     OnCompleteListener<AuthResult> { task ->
-
                         if (task.isSuccessful) {
                             val firebaseUser: FirebaseUser = task.result!!.user!!
                             val registeredEmail = firebaseUser.email!!

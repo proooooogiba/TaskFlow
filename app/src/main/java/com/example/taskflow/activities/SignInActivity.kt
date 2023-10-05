@@ -10,19 +10,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.taskflow.R
+import com.example.taskflow.databinding.ActivityMyProfileBinding
+import com.example.taskflow.databinding.ActivitySignInBinding
 import com.example.taskflow.models.User
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : BaseActivity() {
 
+    private lateinit var binding: ActivitySignInBinding
+
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in)
 
+        binding = ActivitySignInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
-        findViewById<Button>(R.id.btn_sign_in).setOnClickListener {
+        binding.btnSignIn.setOnClickListener {
             signInRegisteredUser()
         }
 
@@ -31,8 +36,7 @@ class SignInActivity : BaseActivity() {
 
 
     private fun setUpActionBar() {
-        val toolbar_sign_in_activity = findViewById<Toolbar>(R.id.toolbar_sign_in_activity)
-        setSupportActionBar(toolbar_sign_in_activity)
+        setSupportActionBar(binding.toolbarSignInActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -40,7 +44,7 @@ class SignInActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
         }
 
-        toolbar_sign_in_activity.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.toolbarSignInActivity.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     fun signInSuccess(user: User) {
@@ -50,10 +54,8 @@ class SignInActivity : BaseActivity() {
     }
 
     private fun signInRegisteredUser() {
-        val et_email = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_email_sign_in)
-        val et_password = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_password_sign_in)
-        val email: String = et_email.text.toString().trim { it <= ' ' }
-        val password: String = et_password.text.toString().trim { it <= ' ' }
+        val email: String = binding.etEmailSignIn.text.toString().trim { it <= ' ' }
+        val password: String = binding.etPasswordSignIn.text.toString().trim { it <= ' ' }
 
         if (validateForm(email, password)) {
             showProgressDialog(resources.getString(R.string.please_wait))
@@ -77,7 +79,6 @@ class SignInActivity : BaseActivity() {
                 }
         }
     }
-
 
 
     private fun validateForm(email: String, password: String): Boolean {

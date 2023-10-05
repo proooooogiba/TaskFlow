@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.taskflow.R
+import com.example.taskflow.databinding.ActivityMainBinding
+import com.example.taskflow.databinding.ActivityMyProfileBinding
 import com.example.taskflow.firebase.FirestoreClass
 import com.example.taskflow.models.User
 import com.example.taskflow.utils.Constants
@@ -26,6 +28,8 @@ import java.lang.Exception
 
 class MyProfileActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityMyProfileBinding
+
     private var mSelectedImageFileUri: Uri? = null
 
     private lateinit var mUserDetails: User
@@ -34,15 +38,14 @@ class MyProfileActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_profile)
+        binding = ActivityMyProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setUpActionBar()
 
         FirestoreClass().loadUserData(this)
 
-        val iv_profile_user_image = findViewById<ImageView>(R.id.iv_profile_user_image)
-
-        iv_profile_user_image.setOnClickListener {
+        binding.ivProfileUserImage.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -56,9 +59,7 @@ class MyProfileActivity : BaseActivity() {
             }
         }
 
-
-        val btn_update = findViewById<Button>(R.id.btn_update)
-        btn_update.setOnClickListener {
+        binding.btnUpdate.setOnClickListener {
             if (mSelectedImageFileUri != null) {
                 uploadUserImage()
             } else {
@@ -96,15 +97,12 @@ class MyProfileActivity : BaseActivity() {
             userHashMap[Constants.IMAGE] = mProfileImageURL
         }
 
-        val et_name = findViewById<AppCompatEditText>(R.id.et_name)
-        val et_mobile = findViewById<AppCompatEditText>(R.id.et_mobile)
-
-        if (et_name.text.toString() != mUserDetails.name) {
-            userHashMap[Constants.NAME] = et_name.text.toString()
+        if (binding.etName.text.toString() != mUserDetails.name) {
+            userHashMap[Constants.NAME] = binding.etName.text.toString()
         }
 
-        if (et_mobile.text.toString() != mUserDetails.mobile.toString()) {
-            userHashMap[Constants.MOBILE] = et_mobile.text.toString().toLong()
+        if (binding.etMobile.text.toString() != mUserDetails.mobile.toString()) {
+            userHashMap[Constants.MOBILE] = binding.etMobile.text.toString().toLong()
         }
 
         // Update the data in the database.
@@ -119,13 +117,12 @@ class MyProfileActivity : BaseActivity() {
             mSelectedImageFileUri = data.data
 
             try {
-                val iv_user_image = findViewById<ImageView>(R.id.iv_profile_user_image)
                 Glide
                     .with(this@MyProfileActivity)
                     .load(mSelectedImageFileUri)
                     .centerCrop()
                     .placeholder(R.drawable.ic_user_place_holder)
-                    .into(iv_user_image)
+                    .into(binding.ivProfileUserImage)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -133,8 +130,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     private fun setUpActionBar() {
-        val toolbar_my_profile_activity = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_my_profile_activity)
-        setSupportActionBar(toolbar_my_profile_activity)
+        setSupportActionBar(binding.toolbarMyProfileActivity)
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
@@ -142,26 +138,22 @@ class MyProfileActivity : BaseActivity() {
             actionBar.title = resources.getString(R.string.my_profile_title)
         }
 
-        toolbar_my_profile_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarMyProfileActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     fun setUserDataUnUI(user: User) {
         mUserDetails = user
-        val iv_user_image = findViewById<ImageView>(R.id.iv_profile_user_image)
         Glide
             .with(this@MyProfileActivity)
             .load(user.image)
             .centerCrop()
             .placeholder(R.drawable.ic_user_place_holder)
-            .into(iv_user_image)
+            .into(binding.ivProfileUserImage)
 
-        val et_name = findViewById<AppCompatEditText>(R.id.et_name)
-        val et_email = findViewById<AppCompatEditText>(R.id.et_email)
-        val et_mobile = findViewById<AppCompatEditText>(R.id.et_mobile)
-        et_name.setText(user.name)
-        et_email.setText(user.email)
+        binding.etName.setText(user.name)
+        binding.etMobile.setText(user.email)
         if (user.mobile != 0L) {
-            et_mobile.setText(user.mobile.toString())
+            binding.etMobile.setText(user.mobile.toString())
         }
     }
 

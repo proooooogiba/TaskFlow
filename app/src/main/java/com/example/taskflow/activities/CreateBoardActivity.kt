@@ -15,6 +15,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.taskflow.R
+import com.example.taskflow.databinding.ActivityBaseBinding
+import com.example.taskflow.databinding.ActivityCreateBoardBinding
 import com.example.taskflow.firebase.FirestoreClass
 import com.example.taskflow.models.Board
 import com.example.taskflow.utils.Constants
@@ -26,12 +28,16 @@ class CreateBoardActivity : BaseActivity() {
 
     private var mSelectedImageFileUri: Uri? = null
 
+    private lateinit var binding: ActivityCreateBoardBinding
+
     private lateinit var mUserName: String
 
     private var mBoardImageURL: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_board)
+
+        binding = ActivityCreateBoardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setUpActionBar()
 
 
@@ -39,9 +45,7 @@ class CreateBoardActivity : BaseActivity() {
             mUserName = intent.getStringExtra(Constants.NAME).toString()
         }
 
-        val iv_board_image = findViewById<ImageView>(R.id.iv_board_image)
-
-        iv_board_image.setOnClickListener {
+        binding.ivBoardImage.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -55,16 +59,16 @@ class CreateBoardActivity : BaseActivity() {
             }
         }
 
-        val btn_create = findViewById<Button>(R.id.btn_create)
-        btn_create.setOnClickListener {
+        binding.btnCreate.setOnClickListener {
             if (mSelectedImageFileUri != null) {
                 uploadBoardImage()
             } else {
                 showProgressDialog(resources.getString(R.string.please_wait))
                 createBoard()
             }
-
         }
+
+
     }
 
 
@@ -96,13 +100,12 @@ class CreateBoardActivity : BaseActivity() {
             mSelectedImageFileUri = data.data
 
             try {
-                val iv_board_image = findViewById<ImageView>(R.id.iv_board_image)
                 Glide
                     .with(this)
                     .load(mSelectedImageFileUri)
                     .centerCrop()
                     .placeholder(R.drawable.ic_user_place_holder)
-                    .into(iv_board_image)
+                    .into(binding.ivBoardImage)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -113,9 +116,8 @@ class CreateBoardActivity : BaseActivity() {
         val assignedUsersArrayList: ArrayList<String> = ArrayList()
         assignedUsersArrayList.add(getCurrentUserID())
 
-        val et_board_name = findViewById<TextView>(R.id.et_board_name)
         var board = Board(
-            et_board_name.text.toString(),
+            binding.etBoardName.text.toString(),
             mBoardImageURL,
             mUserName,
             assignedUsersArrayList
@@ -167,8 +169,7 @@ class CreateBoardActivity : BaseActivity() {
     }
 
     private fun setUpActionBar() {
-        val toolbar_create_board_activity = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_create_board_activity)
-        setSupportActionBar(toolbar_create_board_activity)
+        setSupportActionBar(binding.toolbarCreateBoardActivity)
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
@@ -176,7 +177,6 @@ class CreateBoardActivity : BaseActivity() {
             actionBar.title = resources.getString(R.string.create_board_title)
         }
 
-        toolbar_create_board_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarCreateBoardActivity.setNavigationOnClickListener { onBackPressed() }
     }
-
 }

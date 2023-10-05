@@ -8,6 +8,9 @@ android {
     namespace = "com.example.taskflow"
     compileSdk = 33
 
+    viewBinding.enable = true
+
+
     defaultConfig {
         applicationId = "com.example.taskflow"
         minSdk = 24

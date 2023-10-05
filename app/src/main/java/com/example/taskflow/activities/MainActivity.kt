@@ -15,6 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.taskflow.R
 import com.example.taskflow.adapters.BoardItemsAdapter
+import com.example.taskflow.databinding.ActivityCreateBoardBinding
+import com.example.taskflow.databinding.ActivityMainBinding
+import com.example.taskflow.databinding.AppBarMainBinding
+import com.example.taskflow.databinding.MainContentBinding
+import com.example.taskflow.databinding.NavHeaderMainBinding
 import com.example.taskflow.firebase.FirestoreClass
 import com.example.taskflow.models.Board
 import com.example.taskflow.models.User
@@ -26,6 +31,12 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarMainBinding: AppBarMainBinding
+    private lateinit var mainContentBinding: MainContentBinding
+    private lateinit var navHeaderBinding: NavHeaderMainBinding
+
+
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
         const val CREATE_BOARD_REQUEST_CODE: Int = 12
@@ -35,18 +46,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        appBarMainBinding = binding.appBarMain
+        mainContentBinding = binding.appBarMain.mainContent
+        navHeaderBinding = NavHeaderMainBinding.bind(binding.navView.getHeaderView(0))
+
+        setContentView(binding.root)
 
         setUpActionBar()
 
-        val nav_view = findViewById<NavigationView>(R.id.nav_view)
-        nav_view.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
 
         FirestoreClass().loadUserData(this, true)
         this.onBackPressedDispatcher.addCallback(this, callback)
-
-        val fab_create_board = findViewById<FloatingActionButton>(R.id.fab_create_board)
-        fab_create_board.setOnClickListener {
+        binding.appBarMain.fabCreateBoard.setOnClickListener {
             val intent = Intent(this,
                 CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME, mUserName)
@@ -56,18 +69,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     fun populateBoardListToUI(boardList: ArrayList<Board>) {
         hideProgressDialog()
-        val rv_boards_list = findViewById<RecyclerView>(R.id.rv_boards_list)
-        val tv_no_boards_available = findViewById<TextView>(R.id.tv_no_boards_available)
 
         if (boardList.size > 0) {
-            rv_boards_list.visibility = View.VISIBLE
-            tv_no_boards_available.visibility = View.GONE
+            mainContentBinding.rvBoardsList.visibility = View.VISIBLE
+            mainContentBinding.tvNoBoardsAvailable.visibility = View.GONE
 
-            rv_boards_list.layoutManager = LinearLayoutManager(this)
-            rv_boards_list.setHasFixedSize(true)
+            mainContentBinding.rvBoardsList.layoutManager = LinearLayoutManager(this)
+            mainContentBinding.rvBoardsList.setHasFixedSize(true)
 
             val adapter = BoardItemsAdapter(this, boardList)
-            rv_boards_list.adapter = adapter
+            mainContentBinding.rvBoardsList.adapter = adapter
 
             adapter.setOnClickListener(object: BoardItemsAdapter.OnClickListener{
                 override fun onClick(position: Int, model: Board) {
@@ -76,37 +87,34 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     startActivity(intent)
                 }
             })
-
         } else {
-            rv_boards_list.visibility = View.GONE
-            tv_no_boards_available.visibility = View.VISIBLE
+            mainContentBinding.rvBoardsList.visibility = View.GONE
+            mainContentBinding.tvNoBoardsAvailable.visibility = View.VISIBLE
         }
     }
 
     private fun setUpActionBar() {
-        val toolbar_main_activity = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main_activity)
-        setSupportActionBar(toolbar_main_activity)
-        toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
 
-        toolbar_main_activity.setNavigationOnClickListener {
+        setSupportActionBar(appBarMainBinding.toolbarMainActivity)
+        appBarMainBinding.toolbarMainActivity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
+
+        appBarMainBinding.toolbarMainActivity.setNavigationOnClickListener {
             toggleDrawer()
         }
     }
 
     private fun toggleDrawer() {
-        val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            drawer_layout.openDrawer(GravityCompat.START)
+            binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
 
     val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
-            if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-                drawer_layout.closeDrawer(GravityCompat.START)
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
             } else {
                 doubleBackToExit()
             }
@@ -116,15 +124,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     fun updateNavigationUserDetails(user: User, readBoardsList: Boolean) {
         mUserName = user.name
 
-        val nav_user_image = findViewById<CircleImageView>(R.id.nav_user_image)
         Glide
             .with(this)
             .load(user.image)
             .centerCrop()
             .placeholder(R.drawable.ic_user_place_holder)
-            .into(nav_user_image)
-        val tv_username = findViewById<TextView>(R.id.tv_username)
-        tv_username.text = user.name
+            .into(navHeaderBinding.navUserImage)
+        navHeaderBinding.tvUsername.text = user.name
 
         if (readBoardsList) {
             showProgressDialog(resources.getString((R.string.please_wait)))
@@ -162,8 +168,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 finish()
             }
         }
-        val drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer_layout.closeDrawer(GravityCompat.START)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 }

@@ -7,16 +7,22 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.TextView
 import com.example.taskflow.R
+import com.example.taskflow.databinding.ActivitySignUpBinding
+import com.example.taskflow.databinding.ActivitySplashBinding
 import com.example.taskflow.firebase.FirestoreClass
 
 class SplashActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySplashBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val typeFace: Typeface = Typeface.createFromAsset(assets, "carbon bl.otf")
-        val tv_app_name = findViewById<TextView>(R.id.tv_app_name)
-        tv_app_name.typeface = typeFace
+
+        binding.tvAppName.typeface = typeFace
 
         Handler().postDelayed({
 

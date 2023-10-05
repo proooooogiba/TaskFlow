@@ -9,19 +9,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.taskflow.R
+import com.example.taskflow.databinding.ActivityTaskListBinding
+import com.example.taskflow.databinding.ItemBoardBinding
 
 open class BoardItemsAdapter(private val context: Context,
                              private var list: ArrayList<Board>):
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        private var onClickListener: OnClickListener? = null
+    private lateinit var binding: ItemBoardBinding
+    private var onClickListener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MyViewHolder(
-            LayoutInflater.from(context)
-                .inflate(R.layout.item_board,
-                    parent,
-                    false))
+        binding = ItemBoardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
@@ -38,9 +38,8 @@ open class BoardItemsAdapter(private val context: Context,
                 .placeholder(R.drawable.ic_board_place_holder)
                 .into(holder.itemView.findViewById(R.id.iv_board_image))
 
-            holder.itemView.findViewById<TextView>(R.id.tv_name).text = model.name
-            holder.itemView.findViewById<TextView>(R.id.tv_created_by).text = "Created by: ${model.createBy}"
-
+            binding.tvName.text = model.name
+            binding.tvCreatedBy.text = "Created by: ${model.createBy}"
             holder.itemView.setOnClickListener {
                 if (onClickListener != null) {
                     onClickListener!!.onClick(position, model)
