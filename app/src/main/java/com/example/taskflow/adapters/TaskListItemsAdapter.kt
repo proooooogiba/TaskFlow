@@ -17,19 +17,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.Resource
 import com.example.taskflow.R
 import com.example.taskflow.activities.TaskListActivity
-import com.example.taskflow.databinding.ActivityBaseBinding
 import com.example.taskflow.databinding.ItemTaskBinding
 import com.google.android.gms.tasks.Task
 import org.w3c.dom.Text
 
 open class TaskListItemsAdapter(
     private val context: Context,
-
     private var list: ArrayList<com.example.taskflow.models.Task>):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var binding: ItemTaskBinding
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val layoutParams = LinearLayout.LayoutParams(
@@ -39,6 +36,7 @@ open class TaskListItemsAdapter(
         layoutParams.setMargins((15.toDp()).toPx(), 0, (40.toDp()).toPx(), 0)
         binding.llTaskItem.layoutParams = layoutParams
         return MyViewHolder(binding.root)
+
     }
 
     override fun getItemCount(): Int {
@@ -58,38 +56,39 @@ open class TaskListItemsAdapter(
                     llTaskItem.visibility = View.VISIBLE
                 }
                 tvTaskListTitle.text = model.title
+
                 tvAddTaskList.setOnClickListener {
                     tvAddTaskList.visibility = View.GONE
                     cvAddTaskListName.visibility = View.VISIBLE
                 }
+
                 ibCloseListName.setOnClickListener {
                     tvAddTaskList.visibility = View.VISIBLE
                     cvAddTaskListName.visibility = View.GONE
                 }
 
-                ibCloseListName.setOnClickListener {
-                    val listName = binding.etTaskListName.text.toString()
+                ibDoneListName.setOnClickListener {
+                    val listName = etTaskListName.text.toString()
                     if (listName.isNotEmpty()) {
                         (context as? TaskListActivity)?.createTaskList(listName)
                     } else {
-                        Toast.makeText(context, "Please Enter List Name.",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Please Enter List Name.", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 ibEditListName.setOnClickListener {
-                    binding.etEditTaskListName.setText(model.title)
-                    binding.llTitleView.visibility = View.GONE
-                    binding.cvEditTaskListName.visibility = View.VISIBLE
+                    etEditTaskListName.setText(model.title)
+                    llTitleView.visibility = View.GONE
+                    cvEditTaskListName.visibility = View.VISIBLE
                 }
 
                 ibCloseEditableView.setOnClickListener {
-                    binding.llTitleView.visibility = View.VISIBLE
-                    binding.cvEditTaskListName.visibility = View.GONE
+                    llTitleView.visibility = View.VISIBLE
+                    cvEditTaskListName.visibility = View.GONE
                 }
 
                 ibDoneEditListName.setOnClickListener {
-                    val listName = binding.etEditTaskListName.text.toString()
+                    val listName = etEditTaskListName.text.toString()
                     if (listName.isNotEmpty()) {
                         (context as? TaskListActivity)?.updateTaskList(position, listName, model)
                     } else {
@@ -97,11 +96,33 @@ open class TaskListItemsAdapter(
                     }
                 }
 
-                binding.ibDeleteList.setOnClickListener {
+                ibDeleteList.setOnClickListener {
                     alertDialogForDeleteList(position, model.title)
                 }
+
+                tvAddCard.setOnClickListener {
+                    tvAddCard.visibility = View.GONE
+                    cvAddCard.visibility = View.VISIBLE
+                }
+
+                ibCloseCardName.setOnClickListener {
+                    tvAddCard.visibility = View.VISIBLE
+                    cvAddCard.visibility = View.GONE
+                }
+
+                ibDoneCardName.setOnClickListener {
+                    val cardName = etCardName.text.toString()
+                    if (cardName.isNotEmpty()) {
+                        (context as? TaskListActivity)?.addCardToTaskList(position, cardName)
+                    } else {
+                        Toast.makeText(context, "Please Enter a Card Name.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
             }
         }
+
     }
 
     private fun Int.toDp(): Int =
@@ -109,7 +130,6 @@ open class TaskListItemsAdapter(
 
     private fun Int.toPx(): Int =
         (this * Resources.getSystem().displayMetrics.density).toInt()
-
 
     private fun alertDialogForDeleteList(position: Int, title: String) {
         val builder = AlertDialog.Builder(context)
@@ -121,6 +141,7 @@ open class TaskListItemsAdapter(
         //performing positive action
         builder.setPositiveButton("Yes") { dialogInterface, which ->
             dialogInterface.dismiss() // Dialog will be dismissed
+
             if (context is TaskListActivity) {
                 context.deleteTaskList(position)
             }

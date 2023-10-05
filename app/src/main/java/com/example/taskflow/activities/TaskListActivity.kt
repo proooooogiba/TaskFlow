@@ -9,6 +9,7 @@ import com.example.taskflow.databinding.ActivitySplashBinding
 import com.example.taskflow.databinding.ActivityTaskListBinding
 import com.example.taskflow.firebase.FirestoreClass
 import com.example.taskflow.models.Board
+import com.example.taskflow.models.Card
 import com.example.taskflow.models.Task
 import com.example.taskflow.utils.Constants
 import java.text.FieldPosition
@@ -95,4 +96,28 @@ class TaskListActivity : BaseActivity() {
         FirestoreClass().addUpdateTaskList(this, mBoardDetails)
     }
 
+    fun addCardToTaskList(position: Int, cardName: String) {
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+
+        val cardAssignedUsersList: ArrayList<String> = ArrayList()
+        val user = FirestoreClass().getCurrentUserId()
+        cardAssignedUsersList.add(user)
+
+        val card = Card(cardName, user, cardAssignedUsersList)
+
+        val cardList = mBoardDetails.taskList[position].cards
+        cardList.add(card)
+
+        val task = Task(
+            mBoardDetails.taskList[position].title,
+            mBoardDetails.taskList[position].createdBy,
+            cardList
+        )
+
+        mBoardDetails.taskList[position] = task
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FirestoreClass().addUpdateTaskList(this, mBoardDetails)
+    }
 }
