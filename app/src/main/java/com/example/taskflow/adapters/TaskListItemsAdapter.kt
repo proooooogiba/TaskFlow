@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.view.setMargins
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.Resource
 import com.example.taskflow.R
@@ -120,6 +121,11 @@ open class TaskListItemsAdapter(
                     }
                 }
 
+                rvCardList.layoutManager = LinearLayoutManager(context)
+                rvCardList.setHasFixedSize(true)
+
+                val adapter = CardListItemsAdapter(context, model.cards)
+                rvCardList.adapter = adapter
             }
         }
 

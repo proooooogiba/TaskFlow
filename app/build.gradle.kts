@@ -10,7 +10,6 @@ android {
 
     viewBinding.enable = true
 
-
     defaultConfig {
         applicationId = "com.example.taskflow"
         minSdk = 24

@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.taskflow.R
 import com.example.taskflow.databinding.ActivityBaseBinding
+import com.example.taskflow.databinding.DialogProgressBinding
+import com.example.taskflow.databinding.DialogSearchMemberBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
@@ -28,13 +30,16 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showProgressDialog(text: String) {
+
+        val binding = DialogProgressBinding.inflate(layoutInflater)
+
         mProgressDialog = Dialog(this)
 
         /*Set the screen content from a layout resource.
         The resource will be inflated, adding all top-level views to the screen.*/
-        mProgressDialog.setContentView(R.layout.dialog_progress)
+        mProgressDialog.setContentView(binding.root)
 
-        mProgressDialog.findViewById<TextView>(R.id.tv_progress_text).text = text
+        binding.tvProgressText.text = text
 
         //Start the dialog and display it on screen.
         mProgressDialog.show()
