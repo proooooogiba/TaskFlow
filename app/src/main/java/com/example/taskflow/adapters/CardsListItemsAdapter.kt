@@ -1,6 +1,7 @@
 package com.example.taskflow.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,8 @@ open class CardListItemsAdapter(
     private var onClickListener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        binding = ItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = ItemCardBinding
+            .inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding.root)
     }
 
@@ -25,6 +27,13 @@ open class CardListItemsAdapter(
         val model = list[position]
 
         if (holder is MyViewHolder) {
+            if (model.labelColor.isNotEmpty()) {
+                binding.viewLabelColor.visibility = View.VISIBLE
+                binding.viewLabelColor.setBackgroundColor(Color.parseColor(model.labelColor))
+            } else {
+                binding.viewLabelColor.visibility = View.GONE
+            }
+
             binding.tvCardName.text = model.name
             holder.itemView.setOnClickListener {
                 if (onClickListener != null) {
