@@ -4,6 +4,7 @@ import android.app.Activity
 import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import android.widget.Toast
+import com.example.taskflow.activities.CardDetailsActivity
 import com.example.taskflow.activities.CreateBoardActivity
 import com.example.taskflow.activities.MainActivity
 import com.example.taskflow.activities.MembersActivity
@@ -12,6 +13,7 @@ import com.example.taskflow.activities.SignInActivity
 import com.example.taskflow.activities.SignUpActivity
 import com.example.taskflow.activities.TaskListActivity
 import com.example.taskflow.models.Board
+import com.example.taskflow.models.Card
 import com.example.taskflow.models.User
 import com.example.taskflow.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -159,7 +161,7 @@ class FirestoreClass {
             }
     }
 
-    fun addUpdateTaskList(activity: TaskListActivity, board: Board) {
+    fun addUpdateTaskList(activity: Activity, board: Board) {
         val taskListHashMap = HashMap<String, Any>()
         taskListHashMap[Constants.TASK_LIST] = board.taskList
 
@@ -168,11 +170,17 @@ class FirestoreClass {
             .update(taskListHashMap)
             .addOnSuccessListener {
                 Log.e(activity.javaClass.simpleName, "TaskList updated successfully.")
+                if (activity is TaskListActivity)
+                    activity.addUpdateTaskListSuccess()
+                else if (activity is CardDetailsActivity)
+                    activity.addUpdateCardDetailsSuccess()
 
-                activity.addUpdateTaskListSuccess()
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
+                if (activity is TaskListActivity)
+                    activity.hideProgressDialog()
+                else if (activity is CardDetailsActivity)
+                    activity.addUpdateCardDetailsSuccess()
                 Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
             }
     }
@@ -253,6 +261,5 @@ class FirestoreClass {
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error while assigning user to board")
             }
-
     }
 }
