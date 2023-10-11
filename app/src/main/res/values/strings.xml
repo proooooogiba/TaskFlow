@@ -63,4 +63,6 @@
 
     <string name="str_select_label_color">Select label Color</string>
 
+    <string name="str_select_member">Select Member</string>
+
 </resources>
