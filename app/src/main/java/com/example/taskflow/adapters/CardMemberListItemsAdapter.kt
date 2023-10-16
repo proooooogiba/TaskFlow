@@ -4,9 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.taskflow.R
+import com.example.taskflow.databinding.ItemCardSelectedMemberBinding
+import com.example.taskflow.databinding.ItemTaskBinding
 import com.example.taskflow.models.SelectedMembers
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -17,13 +20,12 @@ class CardMemberListItemsAdapter
     : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
     private var onClickListener: OnClickListener? = null
+    private lateinit var binding: ItemCardSelectedMemberBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MyViewHolder(LayoutInflater.from(context).inflate(
-            R.layout.item_card_selected_member,
-            parent,
-            false
-        ))
+        binding = ItemCardSelectedMemberBinding.inflate(LayoutInflater
+            .from(parent.context), parent, false)
+        return MyViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int = list.size
@@ -31,23 +33,20 @@ class CardMemberListItemsAdapter
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = list[position]
 
-        val iv_add_member = holder.itemView.findViewById<CircleImageView>(R.id.iv_add_member)
-        val iv_selected_member_image = holder.itemView.findViewById<CircleImageView>(R.id.iv_selected_member_image)
-
         if (holder is MyViewHolder) {
             if (position == list.size - 1 && assignMembers) {
-                iv_add_member.visibility = View.VISIBLE
-                iv_selected_member_image.visibility = View.GONE
+                binding.ivAddMember.visibility = View.VISIBLE
+                binding.ivSelectedMemberImage.visibility = View.GONE
             } else {
-                iv_add_member.visibility = View.GONE
-                iv_selected_member_image.visibility = View.VISIBLE
+                binding.ivAddMember.visibility = View.GONE
+                binding.ivSelectedMemberImage.visibility = View.VISIBLE
 
                 Glide
                     .with(context)
                     .load(model.image)
                     .centerCrop()
                     .placeholder(R.drawable.ic_user_place_holder)
-                    .into(iv_selected_member_image)
+                    .into(binding.ivSelectedMemberImage)
             }
 
             holder.itemView.setOnClickListener {

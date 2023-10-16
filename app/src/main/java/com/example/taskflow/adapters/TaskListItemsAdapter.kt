@@ -41,9 +41,9 @@ open class TaskListItemsAdapter(
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
         layoutParams.setMargins((15.toDp()).toPx(), 0, (40.toDp()).toPx(), 0)
-        binding.llTaskItem.layoutParams = layoutParams
-        return MyViewHolder(binding.root)
+        binding.root.layoutParams = layoutParams
 
+        return MyViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
