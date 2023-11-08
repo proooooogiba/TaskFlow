@@ -1,68 +1,68 @@
 <resources>
-    <string name="app_name">TaskFlow</string>
+    <string name="app_name" translatable="false">TaskFlow</string>
 
-    <string name="image_contentDescription">image</string>
-    <string name="let_s_get_started_text">Let\'s Get started</string>
-    <string name="intro_text_description">Collaborate and Plan Together Across Multiple Devices on TaskFlow’s Minimalist
+    <string name="image_contentDescription" translatable="false">изображение</string>
+    <string name="let_s_get_started_text" translatable="false">Начнём</string>
+    <string name="intro_text_description" translatable="false">Collaborate and Plan Together Across Multiple Devices on TaskFlow’s Minimalist
         Interface.
     </string>
-    <string name="sign_in">SIGN IN</string>
-    <string name="sign_up">SIGN UP</string>
+    <string name="sign_in" translatable="false">Авторизация</string>
+    <string name="sign_up" translatable="false">Регистрация</string>
 
 
-    <string name="sign_up_description_text">Enter your name, email id and password, to register with us.</string>
-    <string name="name">Name</string>
-    <string name="password">Password</string>
-    <string name="email">Email</string>
-    <string name="sign_in_description_text">Enter your name, email id and password, to register with us.</string>
+    <string name="sign_up_description_text" translatable="false">Введите своё имя, email и пароль, чтобы зарегистрироваться.</string>
+    <string name="name" translatable="false">Имя</string>
+    <string name="password" translatable="false">Пароль</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="sign_in_description_text" translatable="false">Введите своё имя и пароль, чтобы войти в аккаунт.</string>
 
-    <string name="please_click_back_again_to_exit">Please click back again to exit.</string>
-    <string name="please_wait">Please Wait&#8230;</string>
-    <string name="hello_world">Hello, world!</string>
+    <string name="please_click_back_again_to_exit" translatable="false">Пожалуйста, нажмите «Назад» еще раз, чтобы выйти.</string>
+    <string name="please_wait" translatable="false">Пожалуйста подождите&#8230;</string>
+    <string name="hello_world" translatable="false">Hello, world!</string>
 
-    <string name="nav_my_profile">My Profile</string>
-    <string name="nav_sign_out">Sign Out</string>
+    <string name="nav_my_profile" translatable="false">Мой Профиль</string>
+    <string name="nav_sign_out" translatable="false">Выйти</string>
 
-    <string name="mobile">Mobile</string>
-    <string name="update">UPDATE</string>
-    <string name="my_profile_title">My Profile</string>
+    <string name="mobile" translatable="false">Номер Телефона</string>
+    <string name="update" translatable="false">Обновить</string>
+    <string name="my_profile_title" translatable="false">Мой Профиль</string>
 
-    <string name="create_board_title">Create Board</string>
-    <string name="create">CREATE</string>
-    <string name="board_name">Board Name</string>
-    <string name="create_a_board">create a board</string>
+    <string name="create_board_title" translatable="false">Создать Доску</string>
+    <string name="create" translatable="false">Создать</string>
+    <string name="board_name" translatable="false">Название Доски</string>
+    <string name="create_a_board" translatable="false">Создать Доску</string>
 
-    <string name="no_boards_are_available">No Boards are available!!!</string>
+    <string name="no_boards_are_available" translatable="false">Нет доступных Досок!!!</string>
 
 
-    <string name="action_add_list">Add List</string>
-    <string name="hint_list_name">List Name</string>
-    <string name="action_add_card">Add Card</string>
-    <string name="hint_card_name">Card Name</string>
-    <string name="add_list">Add List</string>
+    <string name="action_add_list" translatable="false">Добавить Список</string>
+    <string name="hint_list_name" translatable="false">Название Списка</string>
+    <string name="action_add_card" translatable="false">Добавить Задачу</string>
+    <string name="hint_card_name" translatable="false">Название Задачи</string>
+    <string name="add_list" translatable="false">Добавить Список</string>
 
-    <string name="members">Members</string>
+    <string name="members" translatable="false">Участники</string>
 
-    <string name="add_member">Add Member</string>
-    <string name="cancel">CANCEL</string>
-    <string name="add">ADD</string>
-    <string name="search_member">Search Member</string>
+    <string name="add_member" translatable="false">Добавить Участника</string>
+    <string name="cancel" translatable="false">Отменить</string>
+    <string name="add" translatable="false">Добавить</string>
+    <string name="search_member" translatable="false">Найти Пользователя</string>
 
-    <string name="label_color">Label Color</string>
-    <string name="select_color">Select Color</string>
-    <string name="select_members">Select Members</string>
-    <string name="due_date">Due Date</string>
-    <string name="select_due_date">Select Due Date</string>
+    <string name="label_color" translatable="false">Цветная Метка</string>
+    <string name="select_color" translatable="false">Выбрать Цвет</string>
+    <string name="select_members" translatable="false">Выбрать Участников</string>
+    <string name="due_date" translatable="false">Дата Исполнения</string>
+    <string name="select_due_date" translatable="false">Выбрать Дату Исполнения</string>
 
-    <string name="delete_card">Delete Card</string>
+    <string name="delete_card" translatable="false">Удалить Задачу</string>
 
-    <string name="alert">Alert</string>
-    <string name="confirmation_message_to_delete_card">Are you sure you want to delete card \'%1$s\'?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="alert" translatable="false">Предупреждение</string>
+    <string name="confirmation_message_to_delete_card" translatable="false">Вы уверены, что хотите удалить задачу \'%1$s\'?</string>
+    <string name="yes" translatable="false">Да</string>
+    <string name="no" translatable="false">Нет</string>
 
-    <string name="str_select_label_color">Select label Color</string>
+    <string name="str_select_label_color" translatable="false">Выбрать цветную метку</string>
 
-    <string name="str_select_member">Select Member</string>
+    <string name="str_select_member" translatable="false">Выбрать Пользователя</string>
 
 </resources>
